@@ -1,0 +1,42 @@
+
+import java.util.*;
+
+public class arrys {
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.print("Enter Total Subjects: ");
+            int TSubjects = sc.nextInt();
+            int TotalSubjects = TSubjects;
+            int Subjects[] = new int[TotalSubjects];
+            
+            for (int i = 0; i < TotalSubjects; i++) {
+                System.out.print("Enter marks of subject " + (i + 1) + " out of 100: ");
+                Subjects[i] = sc.nextInt();
+            }
+            
+            int TotalMarks = 0;
+            for (int i = 0; i < TotalSubjects; i++) {
+                TotalMarks += Subjects[i];
+            }
+            
+            System.out.println("You got " + TotalMarks + " out of " + (TotalSubjects * 100));
+    
+            int percentage = (TotalMarks * 100) / (TotalSubjects * 100);
+            System.out.println("Result showing below : ");  
+            System.out.println("Your Percentage is: " + percentage);
+         
+            if (percentage >= 90) {
+                System.out.println("You get A+ grade");
+            } else if (percentage >= 60) {
+                System.out.println("You get A grade");
+            } else if (percentage >= 50) {
+                System.out.println("You get B grade");
+            } else if (percentage >= 40) {
+                System.out.println("You get C grade");
+            } else {
+                System.out.println("Better Luck Next Time");
+            }
+        }
+    }
+}
+
