@@ -1,0 +1,129 @@
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Course {
+    private String courseCode;
+    private String title;
+    private String description;
+    private int capacity;
+    private String schedule;
+    private List<String> registeredStudents;
+
+    public Course(String courseCode, String title, String description, int capacity, String schedule) {
+        this.courseCode = courseCode;
+        this.title = title;
+        this.description = description;
+        this.capacity = capacity;
+        this.schedule = schedule;
+        this.registeredStudents = new ArrayList<>();
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public List<String> getRegisteredStudents() {
+        return registeredStudents;
+    }
+
+    public void registerStudent(String studentName) {
+        if (registeredStudents.size() < capacity) {
+            registeredStudents.add(studentName);
+        }
+    }
+
+    public void removeStudent(String studentName) {
+        if (registeredStudents.contains(studentName)) {
+            registeredStudents.remove(studentName);
+        }
+    }
+
+   
+    public String toString() {
+        return "Course Code: " + courseCode + "\nTitle: " + title + "\nDescription: " + description
+                + "\nCapacity: " + capacity + "\nSchedule: " + schedule + "\nRegistered Students: " + registeredStudents.size();
+    }
+}
+
+class Student {
+    private String studentID;
+    private String name;
+    private List<String> registeredCourses;
+
+    public Student(String studentID, String name) {
+        this.studentID = studentID;
+        this.name = name;
+        this.registeredCourses = new ArrayList<>();
+    }
+
+    public String getStudentID() {
+        return studentID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getRegisteredCourses() {
+        return registeredCourses;
+    }
+
+    public void registerForCourse(String courseCode, List<Course> courses) {
+        for (Course course : courses) {
+            if (course.getCourseCode().equalsIgnoreCase(courseCode)) {
+                if (course.getRegisteredStudents().size() < course.getCapacity()) {
+                    course.registerStudent(name);
+                    registeredCourses.add(course.getTitle());
+                }
+                return;
+            }
+        }
+    }
+
+    public void dropCourse(String courseTitle, List<Course> courses) {
+        for (Course course : courses) {
+            if (course.getTitle().equalsIgnoreCase(courseTitle)) {
+                course.removeStudent(name);
+                registeredCourses.remove(courseTitle);
+                return;
+            }
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Course> courses = new ArrayList<>();
+        List<Student> students = new ArrayList<>();
+
+        // Adding computer science-related courses
+        courses.add(new Course("CS101", "Introduction to Computer Science", "Basic CS concepts", 30, "Mon/Wed 10:00 AM - 11:30 AM"));
+        courses.add(new Course("CS201", "Data Structures and Algorithms", "Advanced DS and algorithms", 25, "Tue/Thu 2:00 PM - 3:30 PM"));
+        courses.add(new Course("CS301", "Database Management", "Database design and SQL", 20, "Wed/Fri 9:00 AM - 10:30 AM"));
+
+        
+        Student student1 = new Student("S12345", "abc xyz");
+
+        Scanner scanner = new Scanner(System.in);
+
+        scanner.close();
+    }
+}
