@@ -1,0 +1,126 @@
+
+import java.util.*;
+
+class Question {
+    private String questionText;
+    private List<String> options;
+    private int correctOptionIndex;
+
+    public Question(String questionText, List<String> options, int correctOptionIndex) {
+        this.questionText = questionText;
+        this.options = options;
+        this.correctOptionIndex = correctOptionIndex;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public int getCorrectOptionIndex() {
+        return correctOptionIndex;
+    }
+}
+
+class TimerManager {
+    private Timer timer;
+    private int secondsRemaining;
+
+    public TimerManager(int seconds) {
+        this.secondsRemaining = seconds;
+        this.timer = new Timer();
+    }
+
+    public void start() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (secondsRemaining > 0) {
+                    System.out.println("Time remaining: " + secondsRemaining + " seconds");
+                    secondsRemaining--;
+                } else {
+                    System.out.println("Time's up!");
+                    timer.cancel();
+                }
+            }
+        }, 0, 1000);
+    }
+
+    public void stop() {
+        timer.cancel();
+    }
+}
+
+class Quiz {
+    private List<Question> questions;
+    private int currentQuestionIndex;
+    private int score;
+    private TimerManager timer;
+
+    public Quiz(List<Question> questions) {
+        this.questions = questions;
+        this.currentQuestionIndex = 0;
+        this.score = 0;
+    }
+
+    public void start() {
+        if (currentQuestionIndex < questions.size()) {
+            Question currentQuestion = questions.get(currentQuestionIndex);
+            System.out.println("Question: " + currentQuestion.getQuestionText());
+            List<String> options = currentQuestion.getOptions();
+            for (int i = 0; i < options.size(); i++) {
+                System.out.println((i + 1) + ". " + options.get(i));
+            }
+
+            Scanner scanner = new Scanner(System.in);
+            int userChoice;
+            do {
+                System.out.print("Choose an option: ");
+                userChoice = scanner.nextInt();
+            } while (userChoice < 1 || userChoice > options.size());
+
+            if (userChoice - 1 == currentQuestion.getCorrectOptionIndex()) {
+                System.out.println("Correct!");
+                score++;
+            } else {
+                System.out.println("Incorrect.");
+            }
+
+            currentQuestionIndex++;
+
+            timer = new TimerManager(10); // 10 seconds per question
+            timer.start();
+
+            // Wait for the timer to finish
+            try {
+                Thread.sleep(11000); // Wait for 11 seconds (slightly longer than the timer)
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            timer.stop();
+            System.out.println("Score: " + score);
+
+            start(); // Move to the next question
+        } else {
+            System.out.println("Quiz Finished!");
+            System.out.println("Final Score: " + score + " out of " + questions.size());
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Question> questions = new ArrayList<>();
+        questions.add(new Question("What is your favorite color?", List.of("A. Red", "B. Blue", "C. Green", "D. Yellow"), 1));
+        questions.add(new Question("What is your favorite bike brand?", List.of("A. Harley-Davidson", "B. Honda", "C. Yamaha", "D. Suzuki"), 0));
+        questions.add(new Question("What is your favorite city to visit?", List.of("A. New York", "B. Paris", "C. Tokyo", "D. Sydney"), 2));
+        questions.add(new Question("What is your favorite country to travel to?", List.of("A. Italy", "B. Thailand", "C. Canada", "D. Brazil"), 1));
+
+        Quiz quiz = new Quiz(questions);
+        quiz.start();
+    }
+}
